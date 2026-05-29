@@ -1,4 +1,9 @@
-#Requires -RunAsAdministrator
+# Auto-elevate to Administrator if not already running as admin
+if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    Write-Host "Not running as Administrator. Relaunching with elevated privileges..." -ForegroundColor Yellow
+    Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    exit
+}
 
 $ErrorActionPreference = "Stop"
 
